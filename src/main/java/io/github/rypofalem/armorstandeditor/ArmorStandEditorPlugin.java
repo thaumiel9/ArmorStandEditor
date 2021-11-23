@@ -133,6 +133,7 @@ public class ArmorStandEditorPlugin extends JavaPlugin{
 		}
 
 		//Also Warn People to Update if using nmsVersion lower than latest
+		//TODO: Add 1.17 to Non Latest ONCE 1.18 Spigot is Available
 		if (    nmsVersion.startsWith("v1_13") ||
 				nmsVersion.startsWith("v1_14") ||
 				nmsVersion.startsWith("v1_15") ||
@@ -351,5 +352,3 @@ public class ArmorStandEditorPlugin extends JavaPlugin{
 		return iconKey;
 	}
 }
-//todo:
-//Access to the "Marker" switch (so you can make the hitbox super small)
