@@ -27,7 +27,6 @@ import io.github.rypofalem.armorstandeditor.modes.Axis;
 import io.github.rypofalem.armorstandeditor.modes.CopySlots;
 import io.github.rypofalem.armorstandeditor.modes.EditMode;
 
-
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -407,7 +406,10 @@ public class PlayerEditor {
     }
 
     void toggleVisible(ArmorStand armorStand) {
-        if (!getPlayer().hasPermission("asedit.togglearmorstandvisiblity") || !plugin.armorStandVisibility) return; //Option to use perms or Config
+        if (!getPlayer().hasPermission("asedit.togglearmorstandvisibility") || !plugin.armorStandVisibility) {
+            getPlayer().sendMessage(plugin.getLang().getMessage("noperm", "warn"));
+            return; //Option to use perms or Config
+        }
         armorStand.setVisible(!armorStand.isVisible());
     }
 
