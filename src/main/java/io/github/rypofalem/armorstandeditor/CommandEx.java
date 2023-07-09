@@ -74,6 +74,7 @@ public class CommandEx implements CommandExecutor, TabCompleter {
                 sender.sendMessage(VERSION);
                 sender.sendMessage(HELP);
                 sender.sendMessage(RELOAD);
+                return true;
             } else{
                 switch(args[0].toLowerCase()) {
                     case "reload" -> commandReloadConsole(sender);
@@ -85,10 +86,7 @@ public class CommandEx implements CommandExecutor, TabCompleter {
                 }
                 return true;
             }
-
-        }
-
-        if(sender instanceof Player && !getPermissionBasic( (Player) sender)){
+        } else if (sender instanceof Player && !getPermissionBasic((Player) sender)){
             sender.sendMessage(plugin.getLang().getMessage("noperm", "warn"));
             return true;
         } else {
@@ -133,6 +131,7 @@ public class CommandEx implements CommandExecutor, TabCompleter {
             }
             return true;
         }
+
     }
 
 
