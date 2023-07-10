@@ -1,9 +1,10 @@
 #-----------------------------#
 #   ArmorStandEditor-Reborn   #
+#  Main Plugin Configuration  #
 #-----------------------------#
 
 #DO NOT CHANGE THIS - CHANGES AUTOMATICALLY PER UPDATE
-version: "1.20.1-43"
+version: "1.20.x-44"
 
 #----------- LANGUAGE
 #Name of the language file you wish to use
@@ -61,12 +62,8 @@ coarse: 12
 #How many rotations to make a full circle in Fine adjustment mode
 fine: 120
 
-#Allow the option to toggle invisibility for ItemFrames and ArmorStand
-#You can either use this or the below permissions to allow visibility changes
-#asedit.togglearmorstandvisibility
-armorStandVisibility: false
-#asedit.toggleitemframevisibility
-invisibleItemFrames: false
+#armorstandVisibility and invisibleItemFrames have now moved to a separate UI
+#settings YML - Please use that instead!
 
 #------ GUI Options
 
