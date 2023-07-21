@@ -27,6 +27,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
@@ -37,6 +40,7 @@ import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.*;
 import java.util.logging.Level;
 
@@ -45,6 +49,10 @@ public class ArmorStandEditorPlugin extends JavaPlugin{
     //!!! DO NOT REMOVE THESE UNDER ANY CIRCUMSTANCES - Required for BStats and UpdateChecker !!!
     public static final int SPIGOT_RESOURCE_ID = 94503;  //Used for Update Checker
     private static final int PLUGIN_ID = 12668;		     //Used for BStats Metrics
+
+    //Custom ASE Config stuff
+    private File aseUiSettingsFile;
+    private FileConfiguration aseUiConfig;
 
     private NamespacedKey iconKey;
     private static ArmorStandEditorPlugin instance;
@@ -160,6 +168,7 @@ public class ArmorStandEditorPlugin extends JavaPlugin{
 
         //saveResource doesn't accept File.separator on Windows, need to hardcode unix separator "/" instead
         updateConfig("", "config.yml");
+        updateCustomConfig();
         updateConfig(languageFolderLocation, "de_DE.yml");
         updateConfig(languageFolderLocation, "es_ES.yml");
         updateConfig(languageFolderLocation, "fr_FR.yml");
@@ -207,7 +216,7 @@ public class ArmorStandEditorPlugin extends JavaPlugin{
         }
 
         //ArmorStandVisibility Node
-        armorStandVisibility = getConfig().getBoolean("armorStandVisibility", true);
+        armorStandVisibility = getArmorStandVisibility();
 
         //Is there NBT Required for the tool
         requireToolData = getConfig().getBoolean("requireToolData", false);
@@ -231,7 +240,7 @@ public class ArmorStandEditorPlugin extends JavaPlugin{
 
         //All ItemFrame Stuff
         glowItemFrames = getConfig().getBoolean("glowingItemFrame", true);
-        invisibleItemFrames = getConfig().getBoolean("invisibleItemFrames", true);
+        invisibleItemFrames = getItemFrameVisibility();
 
         //Add ability to enable ot Disable the running of the Updater
         runTheUpdateChecker = getConfig().getBoolean("runTheUpdateChecker", true);
@@ -267,6 +276,25 @@ public class ArmorStandEditorPlugin extends JavaPlugin{
         Objects.requireNonNull(getCommand("ase")).setTabCompleter(execute);
 
         getServer().getPluginManager().registerEvents(editorManager, this);
+
+    }
+
+    public FileConfiguration getAseUiConfig() {
+        return this.aseUiConfig;
+    }
+
+    private void updateCustomConfig(){
+        aseUiSettingsFile = new File(getDataFolder(), "ase-ui-settings.yml");
+        if (!aseUiSettingsFile.exists()) {
+            saveResource("ase-ui-settings.yml", false);
+        }
+
+        aseUiConfig = new YamlConfiguration();
+        try {
+            aseUiConfig.load(aseUiSettingsFile);
+        } catch (IOException | InvalidConfigurationException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -381,20 +409,12 @@ public class ArmorStandEditorPlugin extends JavaPlugin{
 
     public String getArmorStandEditorVersion(){ return getConfig().getString("version"); }
 
-    public boolean getArmorStandVisibility(){
-        return getConfig().getBoolean("armorStandVisibility");
-    }
-
-    public boolean getItemFrameVisibility(){
-        return getConfig().getBoolean("invisibleItemFrames");
-    }
-
     public Language getLang(){
         return lang;
     }
 
     public boolean getAllowCustomModelData() {
-        return this.getConfig().getBoolean("allowCustomModelData");
+        return getConfig().getBoolean("allowCustomModelData");
     }
 
     public Material getEditTool() {
@@ -402,15 +422,15 @@ public class ArmorStandEditorPlugin extends JavaPlugin{
     }
 
     public boolean getRunTheUpdateChecker() {
-        return this.getConfig().getBoolean("runTheUpdateChecker");
+        return getConfig().getBoolean("runTheUpdateChecker");
     }
 
-    public Integer getCustomModelDataInt() { return this.getConfig().getInt("customModelDataInt"); }
+    public Integer getCustomModelDataInt() { return getConfig().getInt("customModelDataInt"); }
 
     //New in 1.20-43: Allow the ability to get a player head from a command - ENABLED VIA CONFIG ONLY!
-    public boolean getAllowedToRetrievePlayerHead() { return this.getConfig().getBoolean("allowedToRetrievePlayerHead"); }
+    public boolean getAllowedToRetrievePlayerHead() { return getConfig().getBoolean("allowedToRetrievePlayerHead"); }
 
-    public boolean getAdminOnlyNotifications() { return this.getConfig().getBoolean("adminOnlyNotifications"); }
+    public boolean getAdminOnlyNotifications() { return getConfig().getBoolean("adminOnlyNotifications"); }
 
     public boolean isEditTool(ItemStack itemStk){
         if (itemStk == null) { return false; }
@@ -476,18 +496,15 @@ public class ArmorStandEditorPlugin extends JavaPlugin{
             unregisterScoreboards(scoreboard);
         }
 
-        //Perform Reload
-        reloadConfig();
-
         //Re-Register Scoreboards
         if (!Scheduler.isFolia()) registerScoreboards(scoreboard);
 
         //Reload Config File
         reloadConfig();
+        updateCustomConfig();
 
         //Set Language
         lang = new Language(getConfig().getString("lang"), this);
-
 
         //Rotation
         coarseRot = getConfig().getDouble("coarse");
@@ -514,7 +531,7 @@ public class ArmorStandEditorPlugin extends JavaPlugin{
         }
 
         //ArmorStandVisibility Node
-        armorStandVisibility = getConfig().getBoolean("armorStandVisibility", true);
+        armorStandVisibility = getAseUiConfig().getBoolean("armorStandVisibility", true);
 
         //Is there NBT Required for the tool
         requireToolData = getConfig().getBoolean("requireToolData", false);
@@ -561,6 +578,38 @@ public class ArmorStandEditorPlugin extends JavaPlugin{
 
         }
     }
+
+    //NEW: Permissions over Extra Config File
+
+    //---- Basic and Tool Related Perms to Config
+    public boolean getBasicFunctionsUsage() { return getAseUiConfig().getBoolean("allowArmorStandEditing"); }
+    public boolean getGiveToolCommandUsage() { return getAseUiConfig().getBoolean("allowGivePlayerEditTool"); }
+    public boolean getEquipmentUiAccess() { return getAseUiConfig().getBoolean("accessEquipmentUi"); }
+    public boolean getMovementUsage() { return getAseUiConfig().getBoolean("allowMovement"); }
+    public boolean getRotationUsage() { return getAseUiConfig().getBoolean("allowRotation"); }
+
+    //---- Visibility
+    public boolean getArmorStandVisibility(){ return getAseUiConfig().getBoolean("armorStandVisibility"); }
+    public boolean getItemFrameVisibility(){
+        return getAseUiConfig().getBoolean("invisibleItemFrames");
+    }
+
+    //---- AS Editing Config
+    public boolean getBaseplateToggle() { return getAseUiConfig().getBoolean("showBasePlate"); }
+    public boolean getArmsToggle() { return getAseUiConfig().getBoolean("showArms"); }
+    public boolean getSizeToggle() { return getAseUiConfig().getBoolean("changeSize"); }
+    public boolean getInvulnerabilityToggle() { return getAseUiConfig().getBoolean("allowInvulnerability"); }
+    public boolean getGravityToggle() { return getAseUiConfig().getBoolean("changeGravity"); }
+    public boolean getLockingUsage() { return getAseUiConfig().getBoolean("allowLocking"); }
+    public boolean getCopyConfigUsage() { return getAseUiConfig().getBoolean("allowCopy"); }
+    public boolean getPasteConfigUsage() { return getAseUiConfig().getBoolean("allowPaste"); }
+    public boolean getResetUsage() { return getAseUiConfig().getBoolean("allowConfigReset"); }
+    public boolean getRenameToggleUsage() { return getAseUiConfig().getBoolean("allowRename"); }
+
+    //---- Admin
+    public boolean getUpdateCheckCommandUsage() { return getAseUiConfig().getBoolean("allowUpdateCheckCommand"); }
+    public boolean getReloadCommandUsage() { return getAseUiConfig().getBoolean("allowReloadCommand"); }
+    public boolean getPlayerHeadCommandUsage() { return getAseUiConfig().getBoolean("allowPlayerHeadCommand"); }
 
     public static ArmorStandEditorPlugin instance(){
         return instance;

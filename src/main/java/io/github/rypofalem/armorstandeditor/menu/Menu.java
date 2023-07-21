@@ -124,8 +124,7 @@ public class Menu {
                 "showarms", "mode showarms");
 
         //Praise Start - Sikatsu and cowgod, Nicely spotted this being broken
-        if (pe.getPlayer().hasPermission("asedit.togglearmorstandvisibility") ||
-                pe.plugin.getArmorStandVisibility()) {
+        if (pe.getPlayer().hasPermission("asedit.togglearmorstandvisibility") || pe.plugin.getArmorStandVisibility()) {
             visibility = new ItemStack(Material.POTION, 1);
             PotionMeta potionMeta = (PotionMeta) visibility.getItemMeta();
             PotionEffect eff1 = new PotionEffect(PotionEffectType.INVISIBILITY, 1, 0);
@@ -147,44 +146,44 @@ public class Menu {
 
         //Praise end
 
-        if (pe.getPlayer().hasPermission("asedit.toggleInvulnerability")) {
+        if (pe.getPlayer().hasPermission("asedit.toggleInvulnerability") || pe.plugin.getInvulnerabilityToggle()) {
             toggleVulnerabilty = createIcon(new ItemStack(Material.BEDROCK, 1),
                     "vulnerability", "mode vulnerability");
         }
 
-        if (pe.getPlayer().hasPermission("asedit.togglesize")) {
+        if (pe.getPlayer().hasPermission("asedit.togglesize") || pe.plugin.getSizeToggle()) {
             size = createIcon(new ItemStack(Material.PUFFERFISH, 1),
                     "size", "mode size");
         }
-        if (pe.getPlayer().hasPermission("asedit.disableslots")) {
+        if (pe.getPlayer().hasPermission("asedit.disableslots") || pe.plugin.getLockingUsage()) {
             disableSlots = createIcon(new ItemStack(Material.BARRIER), "disableslots", "mode disableslots");
         }
 
-        if (pe.getPlayer().hasPermission("asedit.togglegravity")) {
+        if (pe.getPlayer().hasPermission("asedit.togglegravity") || pe.plugin.getGravityToggle()) {
             gravity = createIcon(new ItemStack(Material.SAND), "gravity", "mode gravity");
         }
 
-        if (pe.getPlayer().hasPermission("asedit.togglebaseplate")) {
+        if (pe.getPlayer().hasPermission("asedit.togglebaseplate") || pe.plugin.getBaseplateToggle()) {
             plate = createIcon(new ItemStack(Material.STONE_SLAB, 1),
                     "baseplate", "mode baseplate");
         }
 
-        if (pe.getPlayer().hasPermission("asedit.movement")) {
+        if (pe.getPlayer().hasPermission("asedit.movement") || pe.plugin.getMovementUsage()) {
             place = createIcon(new ItemStack(Material.MINECART, 1),
                     "placement", "mode placement");
         }
 
-        if (pe.getPlayer().hasPermission("asedit.rotation")) {
+        if (pe.getPlayer().hasPermission("asedit.rotation") || pe.plugin.getRotationUsage()) {
             rotate = createIcon(new ItemStack(Material.COMPASS, 1),
                     "rotate", "mode rotate");
         }
 
-        if (pe.getPlayer().hasPermission("asedit.equipment")) {
+        if (pe.getPlayer().hasPermission("asedit.equipment") || pe.plugin.getEquipmentUiAccess()) {
             equipment = createIcon(new ItemStack(Material.CHEST, 1),
                     "equipment", "mode equipment");
         }
 
-        if (pe.getPlayer().hasPermission("asedit.copy")) {
+        if (pe.getPlayer().hasPermission("asedit.copy") || pe.plugin.getCopyConfigUsage()) {
             copy = createIcon(new ItemStack(Material.WRITABLE_BOOK),
                     "copy", "mode copy");
 
@@ -201,12 +200,12 @@ public class Menu {
                     "copyslot", "slot 4", "4");
         }
 
-        if (pe.getPlayer().hasPermission("asedit.paste")){
+        if (pe.getPlayer().hasPermission("asedit.paste") || pe.plugin.getPasteConfigUsage()){
             paste = createIcon(new ItemStack(Material.ENCHANTED_BOOK),
                     "paste", "mode paste");
         }
 
-        if(pe.getPlayer().hasPermission("asedit.head") && pe.plugin.getAllowedToRetrievePlayerHead()){
+        if(pe.getPlayer().hasPermission("asedit.head") && pe.plugin.getAllowedToRetrievePlayerHead() || pe.getPlayer().hasPermission("asedit.head") && pe.plugin.getPlayerHeadCommandUsage()){
             playerHead = createIcon(new ItemStack(Material.PLAYER_HEAD, 1),
                     "playerheadmenu",
                     "playerhead");

@@ -68,7 +68,7 @@ permissions:
     description: Toggles ArmorStand visibility.
     default: false
   asedit.toggleitemframevisibility:
-    description: Allows setting of ItemFrame Visibility
+    description: Toggles ItemFrame visibility.
     default: false
   asedit.toggleInvulnerability:
     description: Allows players to toggle the vulnerability state of an ArmorStand.
@@ -83,7 +83,7 @@ permissions:
     description: Allows the toggling of the size of an ArmorStand.
     default: false
   asedit.togglegravity:
-    description: Changes whether the armor stand has gravity
+    description: Changes whether the armor stand has gravity properties.
     default: false
 
   asedit.ignoreProtection.towny:

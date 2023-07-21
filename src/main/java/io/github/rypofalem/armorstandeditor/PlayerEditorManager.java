@@ -128,7 +128,8 @@ public class PlayerEditorManager implements Listener {
 
 
             //Attempt rename
-            if (player.getInventory().getItemInMainHand().getType() == Material.NAME_TAG && player.hasPermission("asedit.rename")) {
+            if (player.getInventory().getItemInMainHand().getType() == Material.NAME_TAG && player.hasPermission("asedit.rename") ||
+                player.getInventory().getItemInMainHand().getType() == Material.NAME_TAG && plugin.getRenameToggleUsage()) {
                 ItemStack nameTag = player.getInventory().getItemInMainHand();
                 String name;
                 if (nameTag.getItemMeta() != null && nameTag.getItemMeta().hasDisplayName()) {
@@ -181,7 +182,10 @@ public class PlayerEditorManager implements Listener {
 
             if (player.getInventory().getItemInMainHand().getType().equals(Material.GLOW_INK_SAC) //attempt glowing
                     && player.hasPermission("asedit.basic")
-                    && plugin.glowItemFrames && player.isSneaking()) {
+                    && plugin.glowItemFrames && player.isSneaking() ||
+                    player.getInventory().getItemInMainHand().getType().equals(Material.GLOW_INK_SAC) //attempt glowing
+                            && plugin.getBasicFunctionsUsage()
+                            && plugin.glowItemFrames && player.isSneaking() ) {
 
                 ItemFrameGlowEvent e = new ItemFrameGlowEvent(itemFrame, player);
                 Bukkit.getPluginManager().callEvent(e);
@@ -340,7 +344,7 @@ public class PlayerEditorManager implements Listener {
         Player player = e.getPlayer();
         if (!plugin.isEditTool(player.getInventory().getItemInMainHand())) return;
         if (plugin.requireSneaking && !player.isSneaking()) return;
-        if(!player.hasPermission("asedit.basic")) return;
+        if(!player.hasPermission("asedit.basic") || plugin.getBasicFunctionsUsage()) return;
         e.setCancelled(true);
         getPlayerEditor(player.getUniqueId()).openMenu();
     }

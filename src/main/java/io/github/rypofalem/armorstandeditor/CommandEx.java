@@ -86,7 +86,7 @@ public class CommandEx implements CommandExecutor, TabCompleter {
                 }
                 return true;
             }
-        } else if (sender instanceof Player && !getPermissionBasic((Player) sender)){
+        } else if (sender instanceof Player && !getPermissionBasic((Player) sender) || sender instanceof Player && !plugin.getBasicFunctionsUsage()){
             sender.sendMessage(plugin.getLang().getMessage("noperm", "warn"));
             return true;
         } else {
@@ -139,7 +139,8 @@ public class CommandEx implements CommandExecutor, TabCompleter {
     // https://github.com/Wolfieheart/ArmorStandEditor-Issues/issues/35 &
     // https://github.com/Wolfieheart/ArmorStandEditor-Issues/issues/30 - See Remarks OTHER
     private void commandGive(Player player) {
-        if (plugin.getAllowCustomModelData() && checkPermission(player, "give", true)) {
+        if (plugin.getAllowCustomModelData() && checkPermission(player, "give", true) ||
+            plugin.getAllowCustomModelData() && plugin.getGiveToolCommandUsage()) {
             ItemStack stack = new ItemStack(plugin.getEditTool()); //Only Support EditTool at the MOMENT
             ItemMeta meta = stack.getItemMeta();
             Objects.requireNonNull(meta).setCustomModelData(plugin.getCustomModelDataInt());
@@ -154,7 +155,8 @@ public class CommandEx implements CommandExecutor, TabCompleter {
     }
 
     private void commandGivePlayerHead(Player player,String[] args) {
-          if(plugin.getAllowedToRetrievePlayerHead() && checkPermission(player, "head", true)){
+          if(plugin.getAllowedToRetrievePlayerHead() && checkPermission(player, "head", true) ||
+             plugin.getAllowedToRetrievePlayerHead() && plugin.getPlayerHeadCommandUsage()){
 
             if(args.length == 2){
 
@@ -299,8 +301,10 @@ public class CommandEx implements CommandExecutor, TabCompleter {
         if (args.length > 1) {
             for ( EditMode mode : EditMode.values()) {
                 if (mode.toString().toLowerCase().contentEquals(args[1].toLowerCase())) {
-                    if (args[1].equals("invisible") && !checkPermission(player, "togglearmorstandvisibility", true)) return;
-                    if (args[1].equals("itemframe") && !checkPermission(player, "toggleitemframevisibility", true)) return;
+                    if (args[1].equals("invisible") && !checkPermission(player, "togglearmorstandvisibility", true) ||
+                        args[1].equals("invisible") && !plugin.getArmorStandVisibility()) return;
+                    if (args[1].equals("itemframe") && !checkPermission(player, "toggleitemframevisibility", true) ||
+                        args[1].equals("itemframe") && !plugin.getItemFrameVisibility()) return;
                     plugin.editorManager.getPlayerEditor(player.getUniqueId()).setMode(mode);
                     return;
                 }
@@ -329,7 +333,7 @@ public class CommandEx implements CommandExecutor, TabCompleter {
     }
 
     private void commandUpdate(Player player) {
-        if (!(checkPermission(player, "update", true))) return;
+        if (!(checkPermission(player, "update", true) || !plugin.getUpdateCheckCommandUsage())) return;
 
         //Only Run if the Update Command Works
         if (plugin.getArmorStandEditorVersion().contains(".x")) {
@@ -348,7 +352,7 @@ public class CommandEx implements CommandExecutor, TabCompleter {
     }
 
     private void commandVersion(Player player) {
-        if (!(getPermissionUpdate(player))) return;
+        if (!(getPermissionUpdate(player) || !plugin.getUpdateCheckCommandUsage())) return;
         String verString = plugin.getArmorStandEditorVersion();
         player.sendMessage(ChatColor.YELLOW + "[ArmorStandEditor] Version: " + verString);
     }
@@ -359,7 +363,7 @@ public class CommandEx implements CommandExecutor, TabCompleter {
     }
 
     private void commandReload(Player player){
-        if(!(getPermissionReload(player))) return;
+        if(!(getPermissionReload(player)) || !plugin.getReloadCommandUsage()) return;
         plugin.performReload();
         player.sendMessage(plugin.getLang().getMessage("reloaded", ""));
     }
@@ -386,17 +390,13 @@ public class CommandEx implements CommandExecutor, TabCompleter {
     private boolean getPermissionBasic(Player player) {
         return checkPermission(player, "basic", false);
     }
-
     private boolean getPermissionGive(Player player) { return checkPermission(player, "give", false); }
-
     private boolean getPermissionUpdate(Player player){
         return checkPermission(player, "update", false);
     }
-
     private boolean getPermissionReload(Player player) {
         return checkPermission(player, "reload", false);
     }
-
     private boolean getPermissionPlayerHead(Player player) { return checkPermission(player, "head", false); }
 
     //REFACTOR COMPLETION
@@ -416,16 +416,16 @@ public class CommandEx implements CommandExecutor, TabCompleter {
                 argList.add("?");
 
                 //Will Only work with permissions
-                if(getPermissionGive(player)){
+                if(getPermissionGive(player) || plugin.getGiveToolCommandUsage()){
                     argList.add("give");
                 }
-                if(getPermissionUpdate(player)){
+                if(getPermissionUpdate(player) || plugin.getUpdateCheckCommandUsage()){
                     argList.add("update");
                 }
-                if(getPermissionReload(player)){
+                if(getPermissionReload(player) || plugin.getReloadCommandUsage()){
                     argList.add("reload");
                 }
-                if(getPermissionPlayerHead(player) && plugin.getAllowedToRetrievePlayerHead()){
+                if(getPermissionPlayerHead(player) && plugin.getAllowedToRetrievePlayerHead() || getPermissionPlayerHead(player) && plugin.getPlayerHeadCommandUsage()){
                     argList.add("playerhead");
                 }
             }

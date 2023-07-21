@@ -1,0 +1,94 @@
+#-----------------------------#
+#   ArmorStandEditor-Reborn   #
+#   UI Configuration Options  #
+#-----------------------------#
+
+## NOTE: This is to make it easier to use the plugin without requiring a
+##       fancy permissions' plugin. If you want to use that, you can ignore
+##       the contents of this file
+
+#Comments are as follows:
+#  asedit.permissionNameHere - for those that want to use permissions
+#  Context/Description of that permission
+
+#----- Basic and Tool Related
+#  Allows the ArmorStandEditor to work
+
+#  asedit.basic
+#  Allow use armorstand edit functions. If set to false it will override all other functions.
+allowArmorStandEditing: false
+
+#  asedit.give
+#  Gives player the EditTool with Proper CustomModelData (NOTE TO USE THIS:
+#  YOU NEED CUSTOM MODEL DATA ENABLED IN CONFIG.YML)
+allowGivePlayerEditTool: false
+
+#  asedit.equipment
+#  Access armorstand equipment GUI
+accessEquipmentUi: false
+
+#  asedit.movement:
+#  Changes whether the armor stand can be moved using the item for editing
+allowMovement: false
+
+#  asedit.rotation
+#  Allows player to rotate the ArmorStand
+allowRotate: false
+
+#----- Visibility Options
+#  Allow the option to toggle invisibility for ItemFrames and ArmorStand
+
+#  asedit.togglearmorstandvisibility
+#  Toggles ArmorStand visibility.
+armorStandVisibility: false
+#  asedit.toggleitemframevisibility
+#  Toggles ItemFrame visibility.
+invisibleItemFrames: false
+
+#----- ArmorStand Editing
+#  Toggles for ArmorStands that do not fit anywhere else
+#  plus some of the more core features to edit an amorstand
+
+#  asedit.togglebaseplate
+#  Allows the toggling of the Baseplate of an ArmorStand.
+showBasePlate: false
+#  asedit.togglearms
+#  Allows the toggling of the Arms of an ArmorStand.
+showArms: false
+#  asedit.togglesize
+#  Allows the toggling of the size of an ArmorStand.
+changeSize: false
+#  asedit.toggleInvulnerability
+#  Allows players to toggle the vulnerability state of an ArmorStand.
+allowInvulnerability: false
+#  asedit.togglegravity
+#  Changes whether the armor stand has gravity properties.
+changeGravity: false
+#  asedit.disableSlots
+#  Allows locking and unlocking the contents of an ArmorStand. When locked, armor and equipment can not be added or removed without unlocking it first.
+allowLocking: false
+#  asedit.copy
+#  Allows the players to create copies of their ArmorStand Configurations.
+allowCopy: false
+#  asedit.paste
+#  Allows the players to apply of a copy of their ArmorStand Configuration.
+allowPaste: false
+#  asedit.reset
+#  Allows the reset of the ArmorStand back to Default values
+allowConfigReset: false
+#  asedit.rename
+#  Rename armorstands - Now Supports Color
+allowRename: false
+
+#----- Admin
+#  Toggles for the Admin Tools
+
+#  asedit.update
+#  Allows the checking for updates.
+allowUpdateCheckCommand: false
+#  asedit.reload
+#  Allows Reloading of the ASE Config.
+allowReloadCommand: false
+#  asedit.head
+#  Allows players to trigger a command to retrieve a player head
+allowPlayerHeadCommand: false

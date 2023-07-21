@@ -112,7 +112,7 @@ public class PlayerEditor {
     }
 
     public void editArmorStand(ArmorStand armorStand) {
-        if (getPlayer().hasPermission("asedit.basic")){
+        if (getPlayer().hasPermission("asedit.basic") || plugin.getBasicFunctionsUsage()){
             armorStand = attemptTarget(armorStand);
             switch (eMode) {
                 case LEFTARM:
@@ -183,7 +183,7 @@ public class PlayerEditor {
     }
 
     public void editItemFrame(ItemFrame itemFrame) {
-        if (getPlayer().hasPermission("asedit.toggleitemframevisibility") || plugin.invisibleItemFrames) {//Option to use perms or Config
+        if (getPlayer().hasPermission("asedit.toggleitemframevisibility") || plugin.getItemFrameVisibility()) {//Option to use perms or Config
 
             //Generate a new ArmorStandManipulationEvent and call it out.
             ItemFrameManipulatedEvent event = new ItemFrameManipulatedEvent(itemFrame, getPlayer());
@@ -208,7 +208,7 @@ public class PlayerEditor {
     }
 
     private void resetPosition(ArmorStand armorStand) {
-        if(getPlayer().hasPermission("asedit.reset")) {
+        if(getPlayer().hasPermission("asedit.reset") || plugin.getResetUsage()) {
             armorStand.setHeadPose(new EulerAngle(0, 0, 0));
             armorStand.setBodyPose(new EulerAngle(0, 0, 0));
             armorStand.setLeftArmPose(new EulerAngle(0, 0, 0));
@@ -221,7 +221,7 @@ public class PlayerEditor {
     }
 
     private void openEquipment(ArmorStand armorStand) {
-        if(getPlayer().hasPermission("asedit.equipment")) {
+        if(getPlayer().hasPermission("asedit.equipment") || plugin.getEquipmentUiAccess()) {
             equipMenu = new EquipmentMenu(this, armorStand);
             equipMenu.open();
         }else{
@@ -230,7 +230,7 @@ public class PlayerEditor {
     }
 
     public void reverseEditArmorStand(ArmorStand armorStand) {
-        if (getPlayer().hasPermission("asedit.basic")) {
+        if (getPlayer().hasPermission("asedit.basic") || plugin.getBasicFunctionsUsage()) {
 
             //Generate a new ArmorStandManipulationEvent and call it out.
             ArmorStandManipulatedEvent event = new ArmorStandManipulatedEvent(armorStand, getPlayer());
@@ -272,7 +272,7 @@ public class PlayerEditor {
     }
 
     private void move(ArmorStand armorStand) {
-        if(getPlayer().hasPermission("asedit.movement")) {
+        if(getPlayer().hasPermission("asedit.movement") || plugin.getMovementUsage()) {
 
             //Generate a new ArmorStandManipulationEvent and call it out.
             ArmorStandManipulatedEvent event = new ArmorStandManipulatedEvent(armorStand, getPlayer());
@@ -298,7 +298,7 @@ public class PlayerEditor {
     }
 
     private void reverseMove(ArmorStand armorStand) {
-        if(getPlayer().hasPermission("asedit.movement")) {
+        if(getPlayer().hasPermission("asedit.movement") || plugin.getMovementUsage()) {
             Location loc = armorStand.getLocation();
             switch (axis) {
                 case X:
@@ -318,7 +318,7 @@ public class PlayerEditor {
     }
 
     private void rotate(ArmorStand armorStand) {
-        if(getPlayer().hasPermission("asedit.rotation")) {
+        if(getPlayer().hasPermission("asedit.rotation") || plugin.getRotationUsage()) {
             Location loc = armorStand.getLocation();
             float yaw = loc.getYaw();
             loc.setYaw((yaw + 180 + (float) degreeAngleChange) % 360 - 180);
@@ -329,7 +329,7 @@ public class PlayerEditor {
     }
 
     private void reverseRotate(ArmorStand armorStand) {
-        if(getPlayer().hasPermission("asedit.rotation")) {
+        if(getPlayer().hasPermission("asedit.rotation")|| plugin.getRotationUsage()) {
             Location loc = armorStand.getLocation();
             float yaw = loc.getYaw();
             loc.setYaw((yaw + 180 - (float) degreeAngleChange) % 360 - 180);
@@ -340,7 +340,7 @@ public class PlayerEditor {
     }
 
     private void copy(ArmorStand armorStand) {
-        if(getPlayer().hasPermission("asedit.copy")) {
+        if(getPlayer().hasPermission("asedit.copy")|| plugin.getCopyConfigUsage()) {
             copySlots.copyDataToSlot(armorStand);
             sendMessage("copied", "" + (copySlots.currentSlot + 1));
             setMode(EditMode.PASTE);
@@ -350,7 +350,7 @@ public class PlayerEditor {
     }
 
     private void paste(ArmorStand armorStand) {
-        if(getPlayer().hasPermission("asedit.paste")) {
+        if(getPlayer().hasPermission("asedit.paste") || plugin.getPasteConfigUsage()) {
             ArmorStandData data = copySlots.getDataToPaste();
             if (data == null) return;
             armorStand.setHeadPose(data.headPos);
@@ -381,7 +381,7 @@ public class PlayerEditor {
     }
 
     private void toggleDisableSlots(ArmorStand armorStand) {
-        if (getPlayer().hasPermission("asedit.disableSlots")) {
+        if (getPlayer().hasPermission("asedit.disableSlots") || plugin.getLockingUsage()) {
             if (armorStand.hasEquipmentLock(EquipmentSlot.HAND, ArmorStand.LockType.REMOVING_OR_CHANGING)) { //Adds a lock to every slot or removes it
                 team = Scheduler.isFolia() ? null : plugin.scoreboard.getTeam(plugin.lockedTeam);
                 armorStandID = armorStand.getUniqueId();
@@ -418,7 +418,7 @@ public class PlayerEditor {
     }
 
     private void toggleInvulnerability(ArmorStand armorStand) { //See NewFeature-Request #256 for more info
-        if(getPlayer().hasPermission("asedit.toggleInvulnerability")) {
+        if(getPlayer().hasPermission("asedit.toggleInvulnerability") || plugin.getInvulnerabilityToggle()) {
             armorStand.setInvulnerable(!armorStand.isInvulnerable());
             sendMessage("toggleinvulnerability", String.valueOf(armorStand.isInvulnerable()));
         }else {
@@ -429,7 +429,7 @@ public class PlayerEditor {
 
 
     private void toggleGravity(ArmorStand armorStand) {
-        if(getPlayer().hasPermission("asedit.togglegravity")) {
+        if(getPlayer().hasPermission("asedit.togglegravity") || plugin.getGravityToggle()) {
 
             //Fix for Wolfst0rm/ArmorStandEditor-Issues#6: Translation of On/Off Keys are broken
             armorStand.setGravity(!armorStand.hasGravity());
@@ -440,7 +440,7 @@ public class PlayerEditor {
     }
 
     void togglePlate(ArmorStand armorStand) {
-        if(getPlayer().hasPermission("asedit.togglebaseplate")){
+        if(getPlayer().hasPermission("asedit.togglebaseplate") || plugin.getBaseplateToggle()){
             armorStand.setBasePlate(!armorStand.hasBasePlate());
         } else {
             getPlayer().sendMessage(noPermMessage);
@@ -448,7 +448,7 @@ public class PlayerEditor {
     }
 
     void toggleArms(ArmorStand armorStand) {
-        if (getPlayer().hasPermission("asedit.togglearms")) {
+        if (getPlayer().hasPermission("asedit.togglearms") || plugin.getArmsToggle()) {
             armorStand.setArms(!armorStand.hasArms());
         } else {
             getPlayer().sendMessage(noPermMessage);
@@ -456,7 +456,7 @@ public class PlayerEditor {
     }
 
     void toggleVisible(ArmorStand armorStand) {
-        if(getPlayer().hasPermission("asedit.togglearmorstandvisibility") || plugin.armorStandVisibility){
+        if(getPlayer().hasPermission("asedit.togglearmorstandvisibility") || plugin.getArmorStandVisibility()){
             armorStand.setVisible(!armorStand.isVisible());
         } else{
             getPlayer().sendMessage(noPermMessage);
@@ -464,7 +464,7 @@ public class PlayerEditor {
     }
 
     void toggleItemFrameVisible(ItemFrame itemFrame) {
-        if (getPlayer().hasPermission("asedit.toggleitemframevisibility") || plugin.invisibleItemFrames){
+        if (getPlayer().hasPermission("asedit.toggleitemframevisibility") || plugin.getItemFrameVisibility()){
             itemFrame.setVisible(!itemFrame.isVisible());
         } else {
             getPlayer().sendMessage(noPermMessage);
@@ -472,7 +472,7 @@ public class PlayerEditor {
     }
 
     void toggleSize(ArmorStand armorStand) {
-        if(!getPlayer().hasPermission("asedit.togglesize")){
+        if(!getPlayer().hasPermission("asedit.togglesize") || plugin.getSizeToggle()){
             armorStand.setSmall(!armorStand.isSmall());
         }else {
             getPlayer().sendMessage(noPermMessage);
