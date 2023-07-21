@@ -293,7 +293,9 @@ public class ArmorStandEditorPlugin extends JavaPlugin{
         try {
             aseUiConfig.load(aseUiSettingsFile);
         } catch (IOException | InvalidConfigurationException e) {
-            e.printStackTrace();
+            getLogger().severe("Unable to load ase-ui-settings.yml - Please check the File exists!");
+            getLogger().severe("ArmorStandEditor will now be disabled");
+            getServer().getPluginManager().disablePlugin(this);
         }
 
     }
