@@ -203,7 +203,7 @@ public class CommandEx implements CommandExecutor, TabCompleter {
 
                 //Let Admins know this command has been ran
                 for(Player onlineList : Bukkit.getOnlinePlayers()){
-                    if(onlineList.hasPermission("asedit.permpack.admin") && plugin.getAdminOnlyNotifications()){
+                    if(onlineList.hasPermission("asedit.report") && plugin.getAdminOnlyNotifications()){
                         onlineList.sendMessage(ChatColor.YELLOW + "[ArmorStandEditor] " + player.getName() + "has just used the /ase playerhead command to get the head for " + args[1]);
                     }
                 }
