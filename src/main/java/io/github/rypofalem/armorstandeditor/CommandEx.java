@@ -207,6 +207,9 @@ public class CommandEx implements CommandExecutor, TabCompleter {
                         onlineList.sendMessage(ChatColor.YELLOW + "[ArmorStandEditor] " + player.getName() + "has just used the /ase playerhead command to get the head for " + args[1]);
                     }
                 }
+
+                //Also log to console
+                plugin.getLogger().warning(ChatColor.YELLOW + "[ArmorStandEditor] " + player.getName() + "has just used the /ase playerhead command to get the head for " + args[1]);
             }
         } else{
             player.sendMessage(plugin.getLang().getMessage("noplayerhead", "warn"));

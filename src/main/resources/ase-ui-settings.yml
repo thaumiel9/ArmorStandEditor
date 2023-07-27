@@ -52,30 +52,39 @@ invisibleItemFrames: false
 #  asedit.togglebaseplate
 #  Allows the toggling of the Baseplate of an ArmorStand.
 showBasePlate: false
+
 #  asedit.togglearms
 #  Allows the toggling of the Arms of an ArmorStand.
 showArms: false
+
 #  asedit.togglesize
 #  Allows the toggling of the size of an ArmorStand.
 changeSize: false
+
 #  asedit.toggleInvulnerability
 #  Allows players to toggle the vulnerability state of an ArmorStand.
 allowInvulnerability: false
+
 #  asedit.togglegravity
 #  Changes whether the armor stand has gravity properties.
 changeGravity: false
+
 #  asedit.disableSlots
 #  Allows locking and unlocking the contents of an ArmorStand. When locked, armor and equipment can not be added or removed without unlocking it first.
 allowLocking: false
+
 #  asedit.copy
 #  Allows the players to create copies of their ArmorStand Configurations.
 allowCopy: false
+
 #  asedit.paste
 #  Allows the players to apply of a copy of their ArmorStand Configuration.
 allowPaste: false
+
 #  asedit.reset
 #  Allows the reset of the ArmorStand back to Default values
 allowConfigReset: false
+
 #  asedit.rename
 #  Rename armorstands - Now Supports Color
 allowRename: false
@@ -86,9 +95,11 @@ allowRename: false
 #  asedit.update
 #  Allows the checking for updates.
 allowUpdateCheckCommand: false
+
 #  asedit.reload
 #  Allows Reloading of the ASE Config.
 allowReloadCommand: false
+
 #  asedit.head
 #  Allows players to trigger a command to retrieve a player head
 allowPlayerHeadCommand: false
