@@ -472,7 +472,7 @@ public class PlayerEditor {
     }
 
     void toggleSize(ArmorStand armorStand) {
-        if(!getPlayer().hasPermission("asedit.togglesize") || plugin.getSizeToggle()){
+        if(getPlayer().hasPermission("asedit.togglesize") || plugin.getSizeToggle()){
             armorStand.setSmall(!armorStand.isSmall());
         }else {
             getPlayer().sendMessage(noPermMessage);
@@ -613,7 +613,7 @@ public class PlayerEditor {
     void sendMessage(String path, String format, String option) {
         String message = plugin.getLang().getMessage(path, format, option);
         if (plugin.sendToActionBar) {
-            if (ArmorStandEditorPlugin.instance().getHasPaper() || ArmorStandEditorPlugin.instance().getHasSpigot()) { //Paper and Spigot having the same Interaction for sendToActionBar
+            if (ArmorStandEditorPlugin.instance().hasPaper || ArmorStandEditorPlugin.instance().hasSpigot) { //Paper and Spigot having the same Interaction for sendToActionBar
                 plugin.getServer().getPlayer(getUUID()).spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(message));
             } else {
                 String rawText = plugin.getLang().getRawMessage(path, format, option);

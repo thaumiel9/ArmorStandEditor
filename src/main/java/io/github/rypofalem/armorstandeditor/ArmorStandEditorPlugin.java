@@ -94,13 +94,15 @@ public class ArmorStandEditorPlugin extends JavaPlugin{
     //Armor Stand Specific Settings
     double coarseRot;
     double fineRot;
-    boolean glowItemFrames = false;
-    boolean invisibleItemFrames = true;
-    boolean armorStandVisibility = true;
 
     //Misc Options
     boolean allowedToRetrievePlayerHead = false;
     boolean adminOnlyNotifications = false;
+    boolean glowItemFrames = false;
+
+    //Visibility Options
+    boolean invisibleItemFrames = true;
+    boolean armorStandVisibility = true;
 
     //Glow Entity Colors
     public Scoreboard scoreboard;
@@ -144,22 +146,20 @@ public class ArmorStandEditorPlugin extends JavaPlugin{
             getLogger().log(Level.INFO,warningMCVer + "{0}",nmsVersion);
             getLogger().info("ArmorStandEditor is compatible with this version of Minecraft. Loading continuing.");
         }
-        //Spigot Check
-        hasSpigot = getHasSpigot();
-        hasPaper = getHasPaper();
+
+        //Spigot/Paper(+fork) Check
+        hasSpigot = checkAndGetHasServerVersion("org.spigotmc.SpigotConfig", "Spigot");
+        hasPaper = checkAndGetHasServerVersion("com.destroystokyo.paper.PaperConfig", "PaperMC");
 
         //If Paper and Spigot are both FALSE - Disable the plugin
-        if (!hasPaper && !hasSpigot){
+        if (hasSpigot) {
+            getLogger().log(Level.INFO,"SpigotMC: {0}",hasSpigot);
+        } else if (hasPaper){
+            getLogger().log(Level.INFO,"PaperMC: {0}",hasPaper);
+        } else{
             getLogger().severe("This plugin requires either Paper, Spigot or one of its forks to run. This is not an error, please do not report this!");
             getServer().getPluginManager().disablePlugin(this);
             getLogger().info(SEPARATOR_FIELD);
-            return;
-        } else {
-            if (hasSpigot) {
-                getLogger().log(Level.INFO,"SpigotMC: {0}",hasSpigot);
-            } else {
-                getLogger().log(Level.INFO,"PaperMC: {0}",hasPaper);
-            }
         }
 
         getServer().getPluginManager().enablePlugin(this);
@@ -385,30 +385,6 @@ public class ArmorStandEditorPlugin extends JavaPlugin{
         return this.getServer().getClass().getPackage().getName().replace(".",",").split(",")[3];
     }
 
-    public boolean getHasSpigot(){
-        try {
-            Class.forName("org.spigotmc.SpigotConfig");
-            nmsVersionNotLatest = "SpigotMC ASAP.";
-            return true;
-        } catch (ClassNotFoundException e){
-            nmsVersionNotLatest = "";
-            return false;
-        }
-    }
-
-    public boolean getHasPaper(){
-        try {
-            Class.forName("com.destroystokyo.paper.PaperConfig");
-            nmsVersionNotLatest = "SpigotMC ASAP.";
-            return true;
-        } catch (ClassNotFoundException e){
-            nmsVersionNotLatest = "";
-            return false;
-        }
-    }
-
-
-
     public String getArmorStandEditorVersion(){ return getConfig().getString("version"); }
 
     public Language getLang(){
@@ -556,7 +532,7 @@ public class ArmorStandEditorPlugin extends JavaPlugin{
 
         //All ItemFrame Stuff
         glowItemFrames = getConfig().getBoolean("glowingItemFrame", true);
-        invisibleItemFrames = getConfig().getBoolean("invisibleItemFrames", true);
+        invisibleItemFrames = getAseUiConfig().getBoolean("invisibleItemFrames", true);
 
         //Add ability to enable ot Disable the running of the Updater
         runTheUpdateChecker = getConfig().getBoolean("runTheUpdateChecker", true);
@@ -685,9 +661,21 @@ public class ArmorStandEditorPlugin extends JavaPlugin{
 
     }
 
+    public boolean checkAndGetHasServerVersion(String className, String serverVersion) {
+        try {
+            Class.forName(className);
+            nmsVersionNotLatest = serverVersion + " ASAP.";
+            return true;
+        } catch (ClassNotFoundException e) {
+            nmsVersionNotLatest = "";
+            return false;
+        }
+    }
+
     public NamespacedKey getIconKey() {
         if(iconKey == null) iconKey = new NamespacedKey(this, "command_icon");
         return iconKey;
     }
+
 
 }

@@ -254,7 +254,7 @@ public class Menu {
     }
 
     public void openMenu() {
-        if (pe.getPlayer().hasPermission("asedit.basic")) {
+        if (pe.getPlayer().hasPermission("asedit.basic") || pe.plugin.getBasicFunctionsUsage()) {
             fillInventory();
             pe.getPlayer().openInventory(menuInv);
         }

@@ -86,11 +86,7 @@ public class CommandEx implements CommandExecutor, TabCompleter {
                 }
                 return true;
             }
-        } else if (sender instanceof Player && !getPermissionBasic((Player) sender) || sender instanceof Player && !plugin.getBasicFunctionsUsage()){
-            sender.sendMessage(plugin.getLang().getMessage("noperm", "warn"));
-            return true;
         } else {
-
             Player player = (Player) sender;
             if (args.length == 0) {
                 player.sendMessage(LISTMODE);
@@ -131,7 +127,6 @@ public class CommandEx implements CommandExecutor, TabCompleter {
             }
             return true;
         }
-
     }
 
 
