@@ -216,6 +216,25 @@ public class PlayerEditorManager implements Listener {
     }
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+    void onArmorStandBreak(EntityDamageByEntityEvent event) { // Fixes issue #309
+        if (!(event.getDamager() instanceof Player))     return; // If the damager is not a player, ignore.
+        if (!(event.getEntity()  instanceof ArmorStand)) return; // If the damaged entity is not an ArmorStand, ignore.
+
+        if (event.getEntity() instanceof ArmorStand entityAS) {
+            // Check if the ArmorStand is invulnerable and if the damager is a player.
+            if (entityAS.isInvulnerable() && event.getDamager() instanceof Player p) {
+                // Check if the player is in Creative mode.
+                if (p.getGameMode() == GameMode.CREATIVE) {
+                    // If the player is in Creative mode and the ArmorStand is invulnerable,
+                    // cancel the event to prevent breaking the ArmorStand.
+                    p.sendMessage(plugin.getLang().getMessage("unabledestroycreative"));
+                    event.setCancelled(true); // Cancel the event to prevent ArmorStand destruction.
+                }
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onSwitchHands(PlayerSwapHandItemsEvent event) {
         if (!plugin.isEditTool(event.getOffHandItem())) return; //event assumes they are already switched
         event.setCancelled(true);
