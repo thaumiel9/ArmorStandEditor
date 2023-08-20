@@ -55,13 +55,13 @@ public class BentoBoxProtection implements Protection  {
         AddonsManager addonsManager = myBento.getAddonsManager();
 
         //Check first if BSkyblock is enabled or if the Player is Owner of that Island
-        if(!addonsManager.getAddonByName("BSkyblock").isPresent()) return true;
+        if(addonsManager.getAddonByName("BSkyblock").isEmpty()) return true;
 
         //Get the Location of the ArmorStand
         Optional<Island> islandOptional = islandsManager.getIslandAt(block.getLocation());
 
         //If there are no Islands Present
-        if(!islandOptional.isPresent()) return true;
+        if(islandOptional.isEmpty()) return true;
 
         //Do not run this check if the player is the owner of the island
         if(islandsManager.isOwner(player.getWorld(), player.getUniqueId())) return true;

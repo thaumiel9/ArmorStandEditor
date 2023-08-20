@@ -119,7 +119,7 @@ public class Language {
                 default: color = !code.isColor() ? color : code;
             }
         }
-        return String.format("{\"text\":\"%s\", \"color\":\"%s\"%s%s%s%s%s}", message, color.name().toLowerCase(),
+        return "{\"text\":\"%s\", \"color\":\"%s\"%s%s%s%s%s}".formatted(message, color.name().toLowerCase(),
             obfuscated, bold, strikethrough, underlined, italic);
     }
 

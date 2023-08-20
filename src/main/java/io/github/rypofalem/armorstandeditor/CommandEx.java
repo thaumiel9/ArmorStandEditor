@@ -88,7 +88,7 @@ public class CommandEx implements CommandExecutor, TabCompleter {
 
         }
 
-        if(sender instanceof Player && !getPermissionBasic( (Player) sender)){
+        if(sender instanceof Player player && !getPermissionBasic( player)){
             sender.sendMessage(plugin.getLang().getMessage("noperm", "warn"));
             return true;
         } else {
