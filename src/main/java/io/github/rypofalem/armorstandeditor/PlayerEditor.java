@@ -18,6 +18,9 @@
  */
 package io.github.rypofalem.armorstandeditor;
 
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
+
 import io.github.rypofalem.armorstandeditor.api.*;
 import io.github.rypofalem.armorstandeditor.menu.EquipmentMenu;
 import io.github.rypofalem.armorstandeditor.menu.Menu;
@@ -27,12 +30,6 @@ import io.github.rypofalem.armorstandeditor.modes.Axis;
 import io.github.rypofalem.armorstandeditor.modes.CopySlots;
 import io.github.rypofalem.armorstandeditor.modes.EditMode;
 
-
-import java.util.ArrayList;
-import java.util.UUID;
-
-import net.md_5.bungee.api.ChatMessageType;
-import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.ItemFrame;
@@ -42,6 +39,9 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Team;
 import org.bukkit.util.EulerAngle;
+
+import java.util.ArrayList;
+import java.util.UUID;
 
 public class PlayerEditor {
     public ArmorStandEditorPlugin plugin;
@@ -201,7 +201,7 @@ public class PlayerEditor {
     }
 
     private void resetPosition(ArmorStand armorStand) {
-        if(!getPlayer().hasPermission("asedit.reset")) return;
+        if (!getPlayer().hasPermission("asedit.reset")) return;
         armorStand.setHeadPose(new EulerAngle(0, 0, 0));
         armorStand.setBodyPose(new EulerAngle(0, 0, 0));
         armorStand.setLeftArmPose(new EulerAngle(0, 0, 0));
@@ -256,7 +256,7 @@ public class PlayerEditor {
     }
 
     private void move(ArmorStand armorStand) {
-        if(!getPlayer().hasPermission("asedit.movement")) return;
+        if (!getPlayer().hasPermission("asedit.movement")) return;
 
         //Generate a new ArmorStandManipulationEvent and call it out.
         ArmorStandManipulatedEvent event = new ArmorStandManipulatedEvent(armorStand, getPlayer());
@@ -279,7 +279,7 @@ public class PlayerEditor {
     }
 
     private void reverseMove(ArmorStand armorStand) {
-        if(!getPlayer().hasPermission("asedit.movement")) return;
+        if (!getPlayer().hasPermission("asedit.movement")) return;
         Location loc = armorStand.getLocation();
         switch (axis) {
             case X:
@@ -296,7 +296,7 @@ public class PlayerEditor {
     }
 
     private void rotate(ArmorStand armorStand) {
-        if(!getPlayer().hasPermission("asedit.rotation")) return;
+        if (!getPlayer().hasPermission("asedit.rotation")) return;
         Location loc = armorStand.getLocation();
         float yaw = loc.getYaw();
         loc.setYaw((yaw + 180 + (float) degreeAngleChange) % 360 - 180);
@@ -304,7 +304,7 @@ public class PlayerEditor {
     }
 
     private void reverseRotate(ArmorStand armorStand) {
-        if(!getPlayer().hasPermission("asedit.rotation")) return;
+        if (!getPlayer().hasPermission("asedit.rotation")) return;
         Location loc = armorStand.getLocation();
         float yaw = loc.getYaw();
         loc.setYaw((yaw + 180 - (float) degreeAngleChange) % 360 - 180);
@@ -312,14 +312,14 @@ public class PlayerEditor {
     }
 
     private void copy(ArmorStand armorStand) {
-        if(!getPlayer().hasPermission("asedit.copy")) return;
+        if (!getPlayer().hasPermission("asedit.copy")) return;
         copySlots.copyDataToSlot(armorStand);
         sendMessage("copied", "" + (copySlots.currentSlot + 1));
         setMode(EditMode.PASTE);
     }
 
     private void paste(ArmorStand armorStand) {
-        if(!getPlayer().hasPermission("asedit.paste")) return;
+        if (!getPlayer().hasPermission("asedit.paste")) return;
         ArmorStandData data = copySlots.getDataToPaste();
         if (data == null) return;
         armorStand.setHeadPose(data.headPos);
@@ -359,7 +359,7 @@ public class PlayerEditor {
             }
             getPlayer().playSound(getPlayer().getLocation(), Sound.ENTITY_ITEM_BREAK, SoundCategory.PLAYERS, 1.0f, 1.0f);
 
-            if(team != null) {
+            if (team != null) {
                 team.removeEntry(armorStandID.toString());
                 armorStand.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 50, 1, false, false)); //300 Ticks = 15 seconds
             }
@@ -371,7 +371,7 @@ public class PlayerEditor {
                 armorStand.addEquipmentLock(slot, ArmorStand.LockType.ADDING);
             }
             getPlayer().playSound(getPlayer().getLocation(), Sound.ITEM_ARMOR_EQUIP_IRON, SoundCategory.PLAYERS, 1.0f, 1.0f);
-            if(team != null) {
+            if (team != null) {
                 team.addEntry(armorStandID.toString());
                 armorStand.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 50, 1, false, false)); //300 Ticks = 15 seconds
             }
@@ -382,15 +382,14 @@ public class PlayerEditor {
     }
 
     private void toggleInvulnerability(ArmorStand armorStand) { //See NewFeature-Request #256 for more info
-        if(!getPlayer().hasPermission("asedit.toggleInvulnerability")) return;
+        if (!getPlayer().hasPermission("asedit.toggleInvulnerability")) return;
         armorStand.setInvulnerable(!armorStand.isInvulnerable());
         sendMessage("toggleinvulnerability", String.valueOf(armorStand.isInvulnerable()));
     }
 
 
-
     private void toggleGravity(ArmorStand armorStand) {
-        if(!getPlayer().hasPermission("asedit.togglegravity")) return;
+        if (!getPlayer().hasPermission("asedit.togglegravity")) return;
 
         //Fix for Wolfst0rm/ArmorStandEditor-Issues#6: Translation of On/Off Keys are broken
         armorStand.setGravity(!armorStand.hasGravity());
@@ -398,12 +397,12 @@ public class PlayerEditor {
     }
 
     void togglePlate(ArmorStand armorStand) {
-        if(!getPlayer().hasPermission("asedit.togglebaseplate")) return;
+        if (!getPlayer().hasPermission("asedit.togglebaseplate")) return;
         armorStand.setBasePlate(!armorStand.hasBasePlate());
     }
 
     void toggleArms(ArmorStand armorStand) {
-        if(!getPlayer().hasPermission("asedit.togglearms")) return;
+        if (!getPlayer().hasPermission("asedit.togglearms")) return;
         armorStand.setArms(!armorStand.hasArms());
     }
 
@@ -418,7 +417,7 @@ public class PlayerEditor {
     }
 
     void toggleSize(ArmorStand armorStand) {
-        if(!getPlayer().hasPermission("asedit.togglesize")) return;
+        if (!getPlayer().hasPermission("asedit.togglesize")) return;
         armorStand.setSmall(!armorStand.isSmall());
     }
 
@@ -542,12 +541,11 @@ public class PlayerEditor {
     }
 
 
-
     ArmorStand attemptTarget(ArmorStand armorStand) {
         if (target == null
-                || !target.isValid()
-                || target.getWorld() != getPlayer().getWorld()
-                || target.getLocation().distanceSquared(getPlayer().getLocation()) > 100)
+            || !target.isValid()
+            || target.getWorld() != getPlayer().getWorld()
+            || target.getLocation().distanceSquared(getPlayer().getLocation()) > 100)
             return armorStand;
         armorStand = target;
         return armorStand;
